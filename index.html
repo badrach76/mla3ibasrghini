@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ملاعب السرغيني | إدارة · حجز · تنظيم</title>
+<style>
+:root{--navy:#102b4e;--blue:#1e5e9e;--green:#15966a;--pale:#f2f7f8;--ink:#182a3a;--muted:#66788a;--line:#e1e9ee;--white:#fff;--gold:#e6b94f}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--pale);color:var(--ink);line-height:1.7}
+header{background:linear-gradient(120deg,#102b4e,#174d75);color:white;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.brand img{width:72px;height:72px;object-fit:contain;background:#fff;border-radius:14px;padding:4px}.brand h1{font-size:22px;margin:0}.brand p{margin:0;color:#cce7df;font-size:13px}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav button{border:1px solid #ffffff45;background:#ffffff12;color:white;border-radius:10px;padding:9px 13px;cursor:pointer;font-weight:700}nav button.active,nav button:hover{background:#fff;color:var(--navy)}
+main{max-width:1180px;margin:24px auto;padding:0 16px}.hero{background:linear-gradient(110deg,#0f2c4d,#1c6892);color:white;border-radius:22px;padding:30px;display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:center;overflow:hidden}.hero h2{font-size:clamp(26px,4vw,40px);line-height:1.35;margin:0 0 12px}.hero p{color:#dceaf4;margin:0 0 20px}.hero .hero-logo{max-width:230px;width:100%;justify-self:center;border-radius:18px;background:#fff;padding:10px}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}.btn.secondary{background:#eaf3f7;color:var(--navy);border:1px solid var(--line)}.btn.danger{background:#b73d4b}.btn.small{padding:6px 10px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 5px 20px #102b4e08}.stat b{display:block;font-size:25px;color:var(--blue)}.stat span{color:var(--muted);font-size:13px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 12px}.section-title h2{margin:0;font-size:22px;color:var(--navy)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.pitch{position:relative;min-height:170px;background:linear-gradient(135deg,#136448,#208b60);border-radius:16px;padding:20px;color:#fff;overflow:hidden}.pitch:after{content:"";position:absolute;inset:18px;border:2px solid #ffffff7d;border-radius:4px;pointer-events:none}.pitch h3,.pitch p,.pitch button{position:relative;z-index:1}.pitch h3{font-size:23px;margin:0 0 6px}.pitch p{margin:0 0 12px;color:#e1f7eb}.pitch .btn{background:white;color:#14583f}
+.panel{display:none}.panel.active{display:block}.muted{color:var(--muted)}.pill{display:inline-block;border-radius:99px;padding:3px 10px;background:#e7f6ee;color:#14774f;font-size:12px;font-weight:700}.pill.pending{background:#fff2d5;color:#885d00}.pill.busy{background:#ffe5e8;color:#a52d3d}
+form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;font-size:13px;font-weight:700;color:#354c60}input,select,textarea{display:block;width:100%;margin-top:5px;border:1px solid #ccd9e1;border-radius:9px;padding:11px;background:white;font:inherit;color:var(--ink)}textarea{min-height:82px;resize:vertical}.full{grid-column:1/-1}.notice{padding:12px 14px;background:#eef8f4;border-right:4px solid var(--green);border-radius:8px;margin:12px 0;font-size:13px}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:580px}th,td{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:13px}th{background:#f6f9fb;color:#42576b}
+.empty{text-align:center;padding:26px;color:var(--muted)}.footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}.actions{display:flex;gap:7px;flex-wrap:wrap}
+@media(max-width:720px){header{padding:12px 4%}.brand img{width:55px;height:55px}.brand h1{font-size:18px}.hero{grid-template-columns:1fr;padding:22px}.hero .hero-logo{max-width:145px;grid-row:1}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}form{grid-template-columns:1fr}.full{grid-column:auto}.section-title{align-items:flex-start;flex-direction:column}nav{width:100%}nav button{flex:1;font-size:12px;padding:8px 6px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><img src="mla3ibasrghini.jpg" alt="شعار ملاعب السرغيني"><div><h1>ملاعب السرغيني</h1><p>إدارة · حجز · تنظيم</p></div></div>
+ <nav>
+  <button class="active" data-panel="home">الرئيسية</button><button data-panel="booking">حجز ملعب</button><button data-panel="schedule">البرنامج</button><button data-panel="members">الانخراط</button><button data-panel="admin">الإدارة</button>
+ </nav>
+</header>
+<main>
+<section id="home" class="panel active">
+ <div class="hero"><div><h2>موعدك الكروي…<br>منظم من البداية</h2><p>منصة موحدة لتدبير حجوزات ملعب السرغيني 1 وملعب السرغيني 2، وتنظيم الفرق واللاعبين والمنخرطين.</p><button class="btn" onclick="showPanel('booking')">اطلب حجزًا الآن</button> <button class="btn secondary" onclick="showPanel('schedule')">شاهد البرنامج</button></div><img class="hero-logo" src="mla3ibasrghini.jpg" alt="شعار المنصة"></div>
+ <div class="stats"><div class="stat"><b>2</b><span>ملعبان متاحان للحجز</span></div><div class="stat"><b id="statBookings">0</b><span>طلبات محفوظة على هذا الجهاز</span></div><div class="stat"><b id="statConfirmed">0</b><span>حجوزات مؤكدة</span></div><div class="stat"><b id="statMembers">0</b><span>طلبات انخراط</span></div></div>
+ <div class="section-title"><h2>اختر الملعب</h2><span class="muted">اطلع على التفاصيل ثم أرسل طلبك</span></div>
+ <div class="grid">
+  <article class="pitch"><h3>ملعب السرغيني 1</h3><p>اطلب الفترة المناسبة لفريقك وتابع حالة الطلب.</p><button class="btn" onclick="selectPitch('ملعب السرغيني 1')">حجز هذا الملعب</button></article>
+  <article class="pitch"><h3>ملعب السرغيني 2</h3><p>اختر اليوم والوقت وتأكد من البرنامج قبل الحجز.</p><button class="btn" onclick="selectPitch('ملعب السرغيني 2')">حجز هذا الملعب</button></article>
+ </div>
+ <div class="notice">تنبيه: هذه نسخة أولية للمعاينة؛ البيانات تحفظ محليًا في المتصفح. لم يتم ربطها بعد بقاعدة بيانات مشتركة أو بنظام أداء إلكتروني.</div>
+</section>
+<section id="booking" class="panel">
+ <div class="section-title"><h2>طلب حجز ملعب</h2><span class="muted">إرسال الطلب لا يعني تأكيد الحجز تلقائيًا</span></div>
+ <div class="card"><form id="bookingForm">
+  <label>الملعب<select id="pitch" required><option>ملعب السرغيني 1</option><option>ملعب السرغيني 2</option></select></label>
+  <label>تاريخ اللعب<input id="date" type="date" required></label>
+  <label>وقت البداية<select id="time" required><option value="">اختر الوقت</option><option>09:00</option><option>10:30</option><option>12:00</option><option>13:30</option><option>15:00</option><option>16:30</option><option>18:00</option><option>19:30</option><option>21:00</option><option>22:30</option></select></label>
+  <label>مدة الحجز<select id="duration"><option value="90">ساعة ونصف</option><option value="60">ساعة</option><option value="120">ساعتان</option></select></label>
+  <label>اسم الفريق<input id="team" required placeholder="مثال: فريق الأصدقاء"></label>
+  <label>اسم قائد الفريق<input id="captain" required placeholder="الاسم الكامل"></label>
+  <label>رقم الهاتف<input id="phone" type="tel" required placeholder="06 أو 07..."></label>
+  <label>عدد اللاعبين<select id="players"><option>5</option><option>6</option><option>7</option><option>8</option><option>10</option><option>12</option><option>14</option><option>أكثر من 14</option></select></label>
+  <label class="full">ملاحظات<textarea id="notes" placeholder="أي تفاصيل إضافية (اختياري)"></textarea></label>
+  <div class="full"><button class="btn" type="submit">إرسال طلب الحجز</button></div>
+ </form></div><div id="bookingMsg"></div>
+</section>
+<section id="schedule" class="panel">
+ <div class="section-title"><h2>برنامج الحجوزات</h2><button class="btn secondary" onclick="renderTables()">تحديث البرنامج</button></div>
+ <div class="card"><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الوقت</th><th>الملعب</th><th>الفريق</th><th>الحالة</th></tr></thead><tbody id="scheduleRows"></tbody></table></div><div id="scheduleEmpty" class="empty">لا توجد طلبات بعد. كن أول من يرسل طلبًا.</div></div>
+</section>
+<section id="members" class="panel">
+ <div class="section-title"><h2>فضاء الانخراط</h2><span class="pill">أولوية الحجز للمنخرطين وفق النظام المعتمد</span></div>
+ <div class="grid"><div class="card"><h3>مزايا الانخراط المقترحة</h3><ul><li>فتح الحجز قبل غير المنخرطين.</li><li>متابعة الحجوزات والطلبات.</li><li>الاستفادة من عروض أو نقاط مكافأة عند اعتمادها.</li><li>تسجيل الفريق واللاعبين في ملف واحد.</li></ul><p class="muted">قيمة الاشتراك وشروط الأولوية يحددها مدير المنصة قبل الإطلاق الرسمي.</p></div>
+ <div class="card"><h3>طلب الانخراط</h3><form id="memberForm"><label>الاسم الكامل<input id="memberName" required></label><label>رقم الهاتف<input id="memberPhone" type="tel" required></label><label>نوع الانخراط<select id="memberType"><option>لاعب</option><option>قائد فريق</option><option>فريق</option></select></label><label>اسم الفريق (إن وجد)<input id="memberTeam"></label><div class="full"><button class="btn" type="submit">إرسال طلب الانخراط</button></div></form><div id="memberMsg"></div></div></div>
+ <div class="card" style="margin-top:16px"><h3>اللاعبون والمشاركون</h3><p class="muted">في النسخة المتقدمة يمكن لقائد الفريق إضافة اللاعبين، وتحديد الحاضرين لكل مباراة، وتسجيل الاعتذار أو الغياب.</p></div>
+</section>
+<section id="admin" class="panel">
+ <div class="section-title"><h2>لوحة الإدارة التجريبية</h2><span class="pill pending">غير محمية بكلمة مرور في هذه النسخة</span></div>
+ <div class="notice">هذه لوحة معاينة محلية فقط. لا تستخدمها لإدارة بيانات حقيقية أو نشر معلومات شخصية؛ يلزم تسجيل دخول وصلاحيات آمنة قبل الإطلاق.</div>
+ <div class="card"><h3>طلبات الحجز</h3><div class="table-wrap"><table><thead><tr><th>التاريخ والوقت</th><th>الملعب</th><th>الفريق</th><th>قائد الفريق</th><th>الهاتف</th><th>الحالة والإجراء</th></tr></thead><tbody id="adminBookingRows"></tbody></table></div><div id="adminBookingEmpty" class="empty">لا توجد طلبات.</div></div>
+ <div class="card" style="margin-top:16px"><h3>طلبات الانخراط</h3><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>الهاتف</th><th>النوع</th><th>الفريق</th><th>الحالة والإجراء</th></tr></thead><tbody id="adminMemberRows"></tbody></table></div><div id="adminMemberEmpty" class="empty">لا توجد طلبات انخراط.</div></div>
+ <div style="margin-top:14px"><button class="btn danger" onclick="clearDemo()">مسح بيانات المعاينة من هذا الجهاز</button></div>
+</section>
+</main>
+<div class="footer">© ملاعب السرغيني — منصة تجريبية لإدارة الملاعب والحجوزات والفرق</div>
+<script>
+const $=id=>document.getElementById(id);
+const get=(k)=>JSON.parse(localStorage.getItem('ms_'+k)||'[]');
+const put=(k,v)=>localStorage.setItem('ms_'+k,JSON.stringify(v));
+function showPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.panel===id));if(id==='schedule'||id==='admin'||id==='home')renderTables();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showPanel(b.dataset.panel)));
+function selectPitch(name){$('pitch').value=name;showPanel('booking')}
+$('date').min=new Date().toISOString().slice(0,10);
+$('bookingForm').addEventListener('submit',e=>{e.preventDefault();const bookings=get('bookings');const item={id:Date.now(),pitch:$('pitch').value,date:$('date').value,time:$('time').value,duration:$('duration').value,team:$('team').value.trim(),captain:$('captain').value.trim(),phone:$('phone').value.trim(),players:$('players').value,notes:$('notes').value,status:'قيد المراجعة'};
+const conflict=bookings.some(b=>b.pitch===item.pitch&&b.date===item.date&&b.time===item.time&&b.status!=='ملغى');
+if(conflict){$('bookingMsg').innerHTML='<div class="notice" style="border-color:#b73d4b;background:#fff0f1">يوجد طلب مسجل لنفس الملعب والتوقيت. اختر توقيتًا آخر أو تواصل مع الإدارة للتأكد من التوفر.</div>';return}
+bookings.push(item);put('bookings',bookings);$('bookingMsg').innerHTML='<div class="notice">تم تسجيل طلبك على هذا الجهاز بنجاح. حالته الآن: قيد المراجعة، وينبغي انتظار تأكيد الإدارة.</div>';$('bookingForm').reset();$('date').min=new Date().toISOString().slice(0,10);renderTables();});
+$('memberForm').addEventListener('submit',e=>{e.preventDefault();const members=get('members');members.push({id:Date.now(),name:$('memberName').value.trim(),phone:$('memberPhone').value.trim(),type:$('memberType').value,team:$('memberTeam').value.trim(),status:'قيد المراجعة'});put('members',members);$('memberMsg').innerHTML='<div class="notice">تم تسجيل طلب الانخراط محليًا، وسيظهر في لوحة الإدارة التجريبية.</div>';$('memberForm').reset();renderTables();});
+function changeStatus(kind,id,status){const arr=get(kind);const x=arr.find(v=>v.id===id);if(x)x.status=status;put(kind,arr);renderTables()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderTables(){const b=get('bookings'),m=get('members');$('statBookings').textContent=b.length;$('statConfirmed').textContent=b.filter(x=>x.status==='مؤكد').length;$('statMembers').textContent=m.length;
+$('scheduleRows').innerHTML=b.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.time)}</td><td>${esc(x.pitch)}</td><td>${esc(x.team)}</td><td><span class="pill ${x.status==='مؤكد'?'':'pending'}">${esc(x.status)}</span></td></tr>`).join('');$('scheduleEmpty').style.display=b.length?'none':'block';
+$('adminBookingRows').innerHTML=b.map(x=>`<tr><td>${esc(x.date)} ${esc(x.time)}</td><td>${esc(x.pitch)}</td><td>${esc(x.team)}</td><td>${esc(x.captain)}</td><td>${esc(x.phone)}</td><td><span class="pill pending">${esc(x.status)}</span><div class="actions" style="margin-top:6px"><button class="btn small" onclick="changeStatus('bookings',${x.id},'مؤكد')">تأكيد</button><button class="btn small secondary" onclick="changeStatus('bookings',${x.id},'قيد المراجعة')">مراجعة</button><button class="btn small danger" onclick="changeStatus('bookings',${x.id},'ملغى')">إلغاء</button></div></td></tr>`).join('');$('adminBookingEmpty').style.display=b.length?'none':'block';
+$('adminMemberRows').innerHTML=m.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.type)}</td><td>${esc(x.team)}</td><td><span class="pill pending">${esc(x.status)}</span><div class="actions" style="margin-top:6px"><button class="btn small" onclick="changeStatus('members',${x.id},'مقبول')">قبول</button><button class="btn small secondary" onclick="changeStatus('members',${x.id},'قيد المراجعة')">مراجعة</button><button class="btn small danger" onclick="changeStatus('members',${x.id},'مرفوض')">رفض</button></div></td></tr>`).join('');$('adminMemberEmpty').style.display=m.length?'none':'block'}
+function clearDemo(){if(confirm('هل تريد حذف كل بيانات المعاينة المحفوظة على هذا الجهاز؟')){localStorage.removeItem('ms_bookings');localStorage.removeItem('ms_members');renderTables()}}
+renderTables();
+</script>
+</body></html>
