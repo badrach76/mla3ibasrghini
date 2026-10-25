@@ -1,6 +1,6 @@
 // استبدل القيم أدناه بمعلومات مشروعك الفعلي في Supabase
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://xgpjpoyqyiyvcdrmcsht.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_h0ZkLkMLy_tK50Flv2b23w_FBaNKi3b';
 
 // تهيئة عميل Supabase (تأكد من تضمين مكتبة supabase-js في ملفات ال html)
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
