@@ -95,8 +95,8 @@ function initBooking(){
             status: 'قيد المراجعة'
         }]);
 
-        if(error){
-            notice('حدث خطأ أثناء إرسال الطلب.','err');
+         if(error){
+            notice('خطأ من القاعدة: ' + error.message, 'err');
         } else {
             form.reset();
             date.min=new Date().toISOString().slice(0,10);
