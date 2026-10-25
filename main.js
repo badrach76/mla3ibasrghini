@@ -1,7 +1,6 @@
 // استبدل القيم أدناه بمعلومات مشروعك الفعلي في Supabase
 const SUPABASE_URL = 'https://xgpjpoyqyiyvcdrmcsht.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_h0ZkLkMLy_tK50Flv2b23w_FBaNKi3b';
-
 // تهيئة عميل Supabase (تأكد من تضمين مكتبة supabase-js في ملفات ال html)
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
@@ -9,7 +8,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
 const settings = async () => {
     if (!supabaseClient) return {locationName:'ملاعب السرغيني',lat:33.52055194368796,lng:-7.710486910872202,price1:'يحدد من الإدارة',price2:'يحدد من الإدارة',prayerNote:'تُراجع المواعيد حسب التوقيت المحلي الموثوق'};
-    let { data } = await supabaseClient.from('settings').select('*').single();
+    let { data } = await supabaseClient.from('platform_settings').select('*').limit(1).single();
     return data || {locationName:'ملاعب السرغيني',lat:33.52055194368796,lng:-7.710486910872202,price1:'يحدد من الإدارة',price2:'يحدد من الإدارة',prayerNote:'تُراجع المواعيد حسب التوقيت المحلي الموثوق'};
 };
 
@@ -55,7 +54,7 @@ async function renderSchedule(){
     let { data: bookings } = await supabaseClient.from('bookings').select('*').eq('status', 'مؤكد');
     const b = (bookings||[]).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
     tbody.innerHTML=b.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.time)}</td><td>${esc(x.duration)} دقيقة</td><td>${esc(x.pitch)}</td><td>${esc(x.team)}</td><td><span class="${statusClass(x.status)}">${esc(x.status)}</span></td></tr>`).join('');
-    $('#scheduleEmpty').hidden=!!b.length;
+    if($('#scheduleEmpty'))$('#scheduleEmpty').hidden=!!b.length;
 }
 
 function initBooking(){
@@ -91,7 +90,7 @@ function initBooking(){
             team: data.team,
             captain: data.captain,
             phone: data.phone,
-            players: data.players,
+            players: Number(data.players),
             notes: data.notes,
             status: 'قيد المراجعة'
         }]);
@@ -188,7 +187,7 @@ async function initMember(){
         msg.addEventListener('submit',async ev=>{
             ev.preventDefault();
             const d=Object.fromEntries(new FormData(msg));
-            await supabaseClient.from('messages').insert([{...d, memberId: id, name: m.name, status: 'جديدة'}]);
+            await supabaseClient.from('member_messages').insert([{...d, memberId: id, name: m.name, status: 'جديدة'}]);
             msg.reset();
             notice('تم إرسال الرسالة إلى الإدارة.');
         });
@@ -199,9 +198,10 @@ async function initAdmin(){
     if(!$('#adminRoot'))return;
     if(sessionStorage.msRole!=='admin'){
         const gate=$('#adminGate');
-        gate.hidden=false;
-        $('#adminRoot').hidden=true;
-        $('#adminLogin').onsubmit=e=>{
+        if(gate)gate.hidden=false;
+        if($('#adminRoot'))$('#adminRoot').hidden=true;
+        const loginForm = $('#adminLogin');
+        if(loginForm)loginForm.onsubmit=e=>{
             e.preventDefault();
             const d=Object.fromEntries(new FormData(e.target));
             if(d.username==='admin'&&d.password==='Admin@12345'){
@@ -211,79 +211,88 @@ async function initAdmin(){
         };
         return;
     }
-    $('#adminGate').hidden=true;
-    $('#adminRoot').hidden=false;
+    if($('#adminGate'))$('#adminGate').hidden=true;
+    if($('#adminRoot'))$('#adminRoot').hidden=false;
     
     const refresh=async()=>{
         if(!supabaseClient) return;
         let { data: bookings } = await supabaseClient.from('bookings').select('*');
         let { data: members } = await supabaseClient.from('members').select('*');
-        let { data: messages } = await supabaseClient.from('messages').select('*');
-        let { data: news } = await supabaseClient.from('news').select('*');
+        let { data: messages } = await supabaseClient.from('member_messages').select('*');
+        let { data: news } = await supabaseClient.from('announcements').select('*');
         
-        $('#adminBookingRows').innerHTML=(bookings||[]).map(x=>`<tr><td>${esc(x.date)} ${esc(x.time)}</td><td>${esc(x.pitch)}</td><td>${esc(x.team)}</td><td>${esc(x.captain)}</td><td>${esc(x.phone)}</td><td><span class="${statusClass(x.status)}">${esc(x.status)}</span></td><td><button class="btn small" data-b="${x.id}" data-status="مؤكد">تأكيد</button> <button class="btn small secondary" data-b="${x.id}" data-status="مرفوض">رفض</button> <button class="btn small danger" data-delete-b="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="7">لا توجد طلبات.</td></tr>';
+        if($('#adminBookingRows'))$('#adminBookingRows').innerHTML=(bookings||[]).map(x=>`<tr><td>${esc(x.date)} ${esc(x.time)}</td><td>${esc(x.pitch)}</td><td>${esc(x.team)}</td><td>${esc(x.captain)}</td><td>${esc(x.phone)}</td><td><span class="${statusClass(x.status)}">${esc(x.status)}</span></td><td><button class="btn small" data-b="${x.id}" data-status="مؤكد">تأكيد</button> <button class="btn small secondary" data-b="${x.id}" data-status="مرفوض">رفض</button> <button class="btn small danger" data-delete-b="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="7">لا توجد طلبات.</td></tr>';
         
-        $('#adminMemberRows').innerHTML=(members||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.team||'')}</td><td>${esc(x.phone)}</td><td>${esc(x.username)}</td><td><span class="${x.status==='مقبول'?'pill':'pill pending'}">${esc(x.status)}</span></td><td><button class="btn small" data-m="${x.id}" data-ms="مقبول">قبول</button> <button class="btn small secondary" data-m="${x.id}" data-ms="قيد المراجعة">تعليق</button> <button class="btn small danger" data-delete-m="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد طلبات انخراط.</td></tr>';
+        if($('#adminMemberRows'))$('#adminMemberRows').innerHTML=(members||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.team||'')}</td><td>${esc(x.phone)}</td><td>${esc(x.username)}</td><td><span class="${x.status==='مقبول'?'pill':'pill pending'}">${esc(x.status)}</span></td><td><button class="btn small" data-m="${x.id}" data-ms="مقبول">قبول</button> <button class="btn small secondary" data-m="${x.id}" data-ms="قيد المراجعة">تعليق</button> <button class="btn small danger" data-delete-m="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد طلبات انخراط.</td></tr>';
         
-        $('#adminMessageRows').innerHTML=(messages||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.topic)}</td><td>${esc(x.phone)}</td><td>${esc(x.message)}</td><td>${esc(x.status)}</td><td><button class="btn small" data-msg="${x.id}">تم الرد</button> <button class="btn small danger" data-delete-msg="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد رسائل.</td></tr>';
+        if($('#adminMessageRows'))$('#adminMessageRows').innerHTML=(messages||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.topic)}</td><td>${esc(x.phone)}</td><td>${esc(x.message)}</td><td>${esc(x.status)}</td><td><button class="btn small" data-msg="${x.id}">تم الرد</button> <button class="btn small danger" data-delete-msg="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد رسائل.</td></tr>';
         
-        $('#adminNewsRows').innerHTML=(news||[]).map(x=>`<tr><td>${esc(x.title)}</td><td>${esc(x.body)}</td><td>${esc(x.date)}</td><td><button class="btn small danger" data-delete-news="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="4">لا توجد مستجدات منشورة.</td></tr>';
+        if($('#adminNewsRows'))$('#adminNewsRows').innerHTML=(news||[]).map(x=>`<tr><td>${esc(x.title)}</td><td>${esc(x.body)}</td><td>${esc(x.date)}</td><td><button class="btn small danger" data-delete-news="${x.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="4">لا توجد مستجدات منشورة.</td></tr>';
         
         const s=await settings();
         for(const k of ['locationName','lat','lng','price1','price2','prayerNote'])if($('#'+k))$('#'+k).value=s[k]??'';
         renderTicker();
     };
     
-    $('#adminRoot').addEventListener('click',async e=>{
-        const t=e.target;
-        if(!supabaseClient) return;
-        if(t.dataset.b){
-            await supabaseClient.from('bookings').update({status: t.dataset.status}).eq('id', Number(t.dataset.b));
-            refresh();
-        }
-        if(t.dataset.deleteB){
-            await supabaseClient.from('bookings').delete().eq('id', Number(t.dataset.deleteB));
-            refresh();
-        }
-        if(t.dataset.m){
-            await supabaseClient.from('members').update({status: t.dataset.ms}).eq('id', Number(t.dataset.m));
-            refresh();
-        }
-        if(t.dataset.deleteM){
-            await supabaseClient.from('members').delete().eq('id', Number(t.dataset.deleteM));
-            refresh();
-        }
-        if(t.dataset.msg){
-            await supabaseClient.from('messages').update({status: 'تم الرد'}).eq('id', Number(t.dataset.msg));
-            refresh();
-        }
-        if(t.dataset.deleteMsg){
-            await supabaseClient.from('messages').delete().eq('id', Number(t.dataset.deleteMsg));
-            refresh();
-        }
-        if(t.dataset.deleteNews){
-            await supabaseClient.from('news').delete().eq('id', Number(t.dataset.deleteNews));
-            refresh();
-        }
-    });
+    const adminRootEl = $('#adminRoot');
+    if(adminRootEl){
+        adminRootEl.addEventListener('click',async e=>{
+            const t=e.target;
+            if(!supabaseClient) return;
+            if(t.dataset.b){
+                await supabaseClient.from('bookings').update({status: t.dataset.status}).eq('id', Number(t.dataset.b));
+                refresh();
+            }
+            if(t.dataset.deleteB){
+                await supabaseClient.from('bookings').delete().eq('id', Number(t.dataset.deleteB));
+                refresh();
+            }
+            if(t.dataset.m){
+                await supabaseClient.from('members').update({status: t.dataset.ms}).eq('id', Number(t.dataset.m));
+                refresh();
+            }
+            if(t.dataset.deleteM){
+                await supabaseClient.from('members').delete().eq('id', Number(t.dataset.deleteM));
+                refresh();
+            }
+            if(t.dataset.msg){
+                await supabaseClient.from('member_messages').update({status: 'تم الرد'}).eq('id', Number(t.dataset.msg));
+                refresh();
+            }
+            if(t.dataset.deleteMsg){
+                await supabaseClient.from('member_messages').delete().eq('id', Number(t.dataset.deleteMsg));
+                refresh();
+            }
+            if(t.dataset.deleteNews){
+                await supabaseClient.from('announcements').delete().eq('id', Number(t.dataset.deleteNews));
+                refresh();
+            }
+        });
+    }
     
-    $('#newsForm').onsubmit=async e=>{
-        e.preventDefault();
-        const d=Object.fromEntries(new FormData(e.target));
-        await supabaseClient.from('news').insert([{...d, date: d.date || new Date().toISOString().slice(0,10)}]);
-        e.target.reset();
-        refresh();
-        notice('تم نشر المستجد بنجاح.');
-    };
+    const newsForm = $('#newsForm');
+    if(newsForm){
+        newsForm.onsubmit=async e=>{
+            e.preventDefault();
+            const d=Object.fromEntries(new FormData(e.target));
+            await supabaseClient.from('announcements').insert([{...d, date: d.date || new Date().toISOString().slice(0,10)}]);
+            e.target.reset();
+            refresh();
+            notice('تم نشر المستجد بنجاح.');
+        };
+    }
     
-    $('#settingsForm').onsubmit=async e=>{
-        e.preventDefault();
-        const d=Object.fromEntries(new FormData(e.target));
-        // افترض وجود جدول settings يحتوي على سجل واحد معرف مسبقاً
-        await supabaseClient.from('settings').update(d).eq('id', 1);
-        notice('حُفظت إعدادات الموقع والأسعار.');
-        refresh();
-    };
+    const settingsForm = $('#settingsForm');
+    if(settingsForm){
+        settingsForm.onsubmit=async e=>{
+            e.preventDefault();
+            const d=Object.fromEntries(new FormData(e.target));
+            // تحديث الإعدادات في أول صف بجدول platform_settings
+            await supabaseClient.from('platform_settings').update(d).eq('id', 1);
+            notice('حُفظت إعدادات الموقع والأسعار.');
+            refresh();
+        };
+    }
     
     $$('[data-admin-tab]').forEach(btn=>btn.onclick=()=>{
         $$('.admin-section').forEach(s=>s.hidden=s.id!==btn.dataset.adminTab);
@@ -296,7 +305,7 @@ async function initAdmin(){
 async function renderNews(){
     const el=$('#newsList');
     if(!el || !supabaseClient)return;
-    let { data: news } = await supabaseClient.from('news').select('*');
+    let { data: news } = await supabaseClient.from('announcements').select('*');
     el.innerHTML=(news||[]).map(x=>`<article class="card"><small class="muted">${esc(x.date)}</small><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join('')||'<div class="card empty">لا توجد مستجدات منشورة حاليًا.</div>';
 }
 
